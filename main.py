@@ -4,6 +4,7 @@ from suppliers.kiaparts import KiaParts
 from suppliers.master_service import MasterService
 from suppliers.vladislav import Vladislav
 from suppliers.vesna import Vesna
+from suppliers.uniks import Uniks
 
 
 
@@ -13,4 +14,5 @@ if __name__ == '__main__':
 	# KiaParts().run()
 	# MasterService().run()
 	# Vladislav().run()
-	Vesna().run()
+	# Vesna().run()
+	Uniks().run()
