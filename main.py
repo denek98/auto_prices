@@ -5,6 +5,10 @@ from suppliers.master_service import MasterService
 from suppliers.vladislav import Vladislav
 from suppliers.vesna import Vesna
 from suppliers.uniks import Uniks
+from suppliers.fords import Fords
+from suppliers.tehnomir import Tehnomir
+from suppliers.centr_gaz import CentrGaz
+from suppliers.elit import Elit
 
 
 
@@ -15,4 +19,8 @@ if __name__ == '__main__':
 	# MasterService().run()
 	# Vladislav().run()
 	# Vesna().run()
-	Uniks().run()
+	# Uniks().run()
+	# Fords().run()
+	# Tehnomir().run()
+	# CentrGaz().run()
+	Elit().run()
