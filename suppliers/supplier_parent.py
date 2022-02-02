@@ -53,7 +53,7 @@ class SupplierParent:
             df_list = pool.map(self._create_dataframe_for_delivery_days,self._delivery_days_options_list)
         self._resulted_df = pd.concat(df_list)
         self._df_to_cannonical()
-        self._resulted_df.to_csv(self._output_csv_path,index=False,header=None,sep=';')
+        self._resulted_df.to_csv(self._output_csv_path, index=False, header=None, sep=';')
         return True
         
     def _count_quantity_for_n_days(self,series,delivery_days):
