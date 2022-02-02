@@ -48,7 +48,6 @@ class Tehnomir(SupplierParent):
             df_list = pool.map(self._create_dataframe_for_delivery_days, self._input_excel_path_list)
         self._resulted_df = pd.concat(df_list)
         self._df_to_cannonical()
-        print(self._resulted_df)
         self._resulted_df.to_csv(self._output_csv_path, index=False, header=None, sep=';')
         return True
 
