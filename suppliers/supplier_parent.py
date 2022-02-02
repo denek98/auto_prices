@@ -33,7 +33,7 @@ class SupplierParent:
     def _get_excel_file_path(self):
         supplier_input_folder_path = os.path.join(config.input_folder_name, self._supplier_dict['supplier_folder'])
         supplier_excel_file_list = os.listdir(supplier_input_folder_path)
-        supplier_excel_file = [file for file in supplier_excel_file_list if any(['xl' in file,'csv' in file])][0]
+        supplier_excel_file = [file for file in supplier_excel_file_list if any(['xl' in file.lower(),'csv' in file.lower()])][0]
         input_excel_path = os.path.join(supplier_input_folder_path, supplier_excel_file)
         return input_excel_path
 
