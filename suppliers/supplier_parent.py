@@ -17,18 +17,45 @@ class SupplierParent:
 
     def _repack_excel_from_1c(self):
         try:
-            tmp_folder = '/tmp/convert_wrong_excel/'
+            tmp_folder = '/tmp/'+ self._supplier_name + '/convert_wrong_excel/'
             os.makedirs(tmp_folder, exist_ok=True)
             with ZipFile(self._input_excel_path) as excel_container:
                 excel_container.extractall(tmp_folder)
             wrong_file_path = os.path.join(tmp_folder, 'xl', 'SharedStrings.xml')
             correct_file_path = os.path.join(tmp_folder, 'xl', 'sharedStrings.xml')
             os.rename(wrong_file_path, correct_file_path) 
-            shutil.make_archive('yourfile', 'zip', tmp_folder)
-            os.rename('yourfile.zip', self._input_excel_path)
+            shutil.make_archive(self._supplier_name, 'zip', tmp_folder)
+            os.rename(self._supplier_name + '.zip', self._input_excel_path)
         except:
             return False
         return True
+
+    def _read_from_excel(self):
+        self._repack_excel_from_1c()
+        read_df = pd.read_excel(self._input_excel_path,skiprows=self._useless_rows_number ,header=None)
+        return read_df
+
+    def _create_dataframe_for_delivery_days(self,delivery_days):
+        df_for_delivery_days = pd.DataFrame()
+        for key in self._columns_dict:
+            if key in self._primary_columns_from_excel_list:
+                df_for_delivery_days[key] = (self._read_df.iloc[:,self._columns_dict[key] - 1])
+        df_for_delivery_days['Количество'] = self._read_df.apply(self._count_quantity_for_n_days,args=(delivery_days,),axis=1)
+        df_for_delivery_days = df_for_delivery_days[df_for_delivery_days['Количество'].notna()]
+        df_for_delivery_days = df_for_delivery_days[df_for_delivery_days['Количество'] != 0]
+        df_for_delivery_days['Срок поставки'] = delivery_days
+        return df_for_delivery_days
+
+    # def _create_dataframe_for_delivery_days(self,delivery_days):
+    #     df_for_delivery_days = pd.DataFrame()
+    #     for key in self._columns_dict:
+    #         if key in self._primary_columns_from_excel_list:
+    #             df_for_delivery_days[key] = (self._read_df.iloc[:,self._columns_dict[key] - 1])
+    #     df_for_delivery_days['Количество'] = self._read_df.apply(self._count_quantity_for_n_days,args=(delivery_days,),axis=1)
+    #     df_for_delivery_days = df_for_delivery_days[df_for_delivery_days['Количество'].notna()]
+    #     df_for_delivery_days = df_for_delivery_days[df_for_delivery_days['Количество'] != 0]
+    #     df_for_delivery_days['Срок поставки'] = delivery_days
+    #     return df_for_delivery_days  
 
     def _get_excel_file_path(self):
         supplier_input_folder_path = os.path.join(config.input_folder_name, self._supplier_dict['supplier_folder'])
@@ -48,9 +75,11 @@ class SupplierParent:
         return True
 
     def run(self):
+        self._read_df = self._read_from_excel()
         self._read_df.dropna(subset=[self._columns_dict['Артикул']-1,self._columns_dict["Цена"]-1,self._columns_dict["Производитель"]-1],inplace=True)
-        with Pool(3) as pool:
-            df_list = pool.map(self._create_dataframe_for_delivery_days,self._delivery_days_options_list)
+        # with Pool(3) as pool:
+        #     df_list = pool.map(self._create_dataframe_for_delivery_days,self._delivery_days_options_list)
+        df_list = [self._create_dataframe_for_delivery_days(delivery_day) for delivery_day in self._delivery_days_options_list]
         self._resulted_df = pd.concat(df_list)
         self._df_to_cannonical()
         self._resulted_df.to_csv(self._output_csv_path, index=False, header=None, sep=';')

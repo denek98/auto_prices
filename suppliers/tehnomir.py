@@ -20,7 +20,7 @@ class Tehnomir(SupplierParent):
     def _read_from_excel(self, file_path):
         read_df = pd.read_excel(file_path, skiprows=self._useless_rows_number, header=None)
         return read_df
-
+        
     def _create_dataframe_for_delivery_days(self, file_path):
         delivery_days = file_path.split('.')[-2][-1]
         df_from_file = self._read_from_excel(file_path)
@@ -44,8 +44,9 @@ class Tehnomir(SupplierParent):
 
     def run(self):
         # self._read_df.dropna(subset=[self._columns_dict['Артикул']-1,self._columns_dict["Цена"]-1,self._columns_dict["Производитель"]-1],inplace=True)
-        with Pool(3) as pool:
-            df_list = pool.map(self._create_dataframe_for_delivery_days, self._input_excel_path_list)
+        # with Pool(3) as pool:
+        #     df_list = pool.map(self._create_dataframe_for_delivery_days, self._input_excel_path_list)
+        df_list = [self._create_dataframe_for_delivery_days(input_excel) for input_excel in self._input_excel_path_list]
         self._resulted_df = pd.concat(df_list)
         self._df_to_cannonical()
         self._resulted_df.to_csv(self._output_csv_path, index=False, header=None, sep=';')

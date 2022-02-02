@@ -15,7 +15,7 @@ class KiaParts(SupplierParent):
 		self._output_csv_path = os.path.join(config.output_folder_name,self._supplier_dict['output_filename'])
 		self._columns_dict = self._supplier_dict['supplier_columns_dict']
 		self._useless_rows_number = self._supplier_dict['Количество бесполезных строк']
-		self._read_df = self._read_from_excel()
+		self._read_df = pd.DataFrame()
 
 	def _read_from_excel(self):
 		read_df = pd.read_excel(self._input_excel_path,skiprows=self._useless_rows_number,engine='xlrd',header=None)
@@ -34,8 +34,10 @@ class KiaParts(SupplierParent):
 		return df_for_delivery_days	
 
 	def run(self):
-		with Pool(3) as pool:
-			df_list = pool.map(self._create_dataframe_for_delivery_days,[0,1])
+		# with Pool(3) as pool:
+		# 	df_list = pool.map(self._create_dataframe_for_delivery_days,[0,1])
+		self._read_df = self._read_from_excel()
+		df_list = [self._create_dataframe_for_delivery_days(day) for day in [0,1]]
 		self._resulted_df = pd.concat(df_list)
 		self._df_to_cannonical()
 		self._resulted_df.to_csv(self._output_csv_path,index=False,header=None,sep=';')
