@@ -22,6 +22,9 @@ from suppliers.avdtrade import AvdTrade
 from suppliers.brovacars import BrovaCar
 from multiprocessing import Process
 import time
+import tkinter as tk
+from tkinter.ttk import Checkbutton
+
 
 def runInParallel(*fns):
     proc = []
@@ -35,9 +38,70 @@ def runInParallel(*fns):
 
 if __name__ == '__main__':
     time1 = time.time()
-    runInParallel(Avtonova().run,InterCars().run,KiaParts().run,Vladislav().run,MasterService().run,Vesna().run,
-                  Uniks().run,Fords().run,Tehnomir().run,CentrGaz().run,Elit().run,Scar().run,Omega().run,SollyPlus().run,
-                  MaxParts().run,Zenit().run,ElitOem().run,BusMarket().run,Bastion().run,AvtoTechnics().run,AvdTrade().run,BrovaCar().run)
+    runInParallel(
+        Avtonova().run,
+        AvdTrade().run,
+        InterCars().run,
+        KiaParts().run,
+        Vladislav().run,
+        MasterService().run,
+        Vesna().run,
+        Uniks().run,
+        Fords().run,
+        Tehnomir().run,
+        CentrGaz().run,
+        Elit().run,
+        Scar().run,
+        Omega().run,
+        SollyPlus().run,
+        MaxParts().run,
+        Zenit().run,
+        ElitOem().run,
+        BusMarket().run,
+        Bastion().run,
+        AvtoTechnics().run,
+        BrovaCar().run
+    )
     print(time.time() - time1)
 
+    # supplier_checkbox = {
+    # 'Автонова': 0,
+    # 'АвдТрейд':0,
+    # 'ИнтерКарс':0,
+    # 'КиаПартс': 0,
+    # 'Владислав': 0,
+    # 'МастерСервис': 0,
+    # 'Весна': 0,
+    # 'Юникс': 0,
+    # 'Фордс': 0,
+    # 'Техномир': 0,
+    # 'ЦентрГаз': 0,
+    # 'Елит': 0,
+    # 'Скар': 0,
+    # 'Омега': 0,
+    # 'СоллиПлюс': 0,
+    # 'МаксПартс': 0,
+    # 'Зенит': 0,
+    # 'ЕлитОем': 0,
+    # 'БасМаркет': 0,
+    # 'Бастион': 0,
+    # 'АвтоТехникс': 0,
+    # 'БроваКар': 0,
+    # }
+    # window = tk.Tk()
+    # window.title("Система обновления потавщиков")
+    # window.geometry('800x500')
+    # lbl = tk.Label(
+    #     text="Выберите поставщиков которые хотите обновить",
+    #     height=1,
+    #     font=("Arial", 20)
+    # )
+
+    # chk_state = tk.BooleanVar()
+    # for machine in supplier_checkbox:
+    #     supplier_checkbox[machine] = Variable()
+    #     l = Checkbutton(text=machine, variable=supplier_checkbox[machine])
+    #     l.pack()
+    # lbl.pack()
+    # window.mainloop()
 

@@ -9,6 +9,7 @@ class CentrGaz(SupplierParent):
     def __init__(self):
         SupplierParent.__init__(self)
         self._supplier_name = 'centr_gaz'
+        self.set_logger('centr_gaz')
         self._supplier_dict = suppliers_dict[self._supplier_name]
         self._input_excel_path = self._get_excel_file_path()
         self._output_csv_path = os.path.join(config.output_folder_name, self._supplier_dict['output_filename'])
